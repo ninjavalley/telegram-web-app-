@@ -1,10 +1,12 @@
 // WebView
 (function () {
+  console.log("Hello");
   var eventHandlers = {};
 
   var locationHash = '';
   try {
     locationHash = location.hash.toString();
+    console.log("location Hash >>>>", locationHash);
   } catch (e) {}
 
   var initParams = urlParseHashParams(locationHash);
@@ -21,6 +23,7 @@
   var isIframe = false, iFrameStyle;
   try {
     isIframe = (window.parent != null && window != window.parent);
+    console.log(">>>>isIframe >>>>>",isIframe);
     if (isIframe) {
       window.addEventListener('message', function (event) {
         if (event.source !== window.parent) return;
@@ -39,6 +42,7 @@
         }
       });
       iFrameStyle = document.createElement('style');
+      console.log(">>>> iFrameStyle >>>>", iFrameStyle);
       document.head.appendChild(iFrameStyle);
       try {
         window.parent.postMessage(JSON.stringify({eventType: 'iframe_ready'}), '*');
@@ -136,9 +140,9 @@
     }
     else if (isIframe) {
       try {
-        //var trustedTarget = 'https://web.telegram.org';
+        var trustedTarget = 'https://web.telegram.org';
         // For now we don't restrict target, for testing purposes
-        var trustedTarget = '*';
+        trustedTarget = '*';
         window.parent.postMessage(JSON.stringify({eventType: eventType, eventData: eventData}), trustedTarget);
         if (initParams.tgWebAppDebug) {
           console.log('[Telegram.WebView] postEvent via postMessage', eventType, eventData);
@@ -150,6 +154,7 @@
     }
     else {
       if (initParams.tgWebAppDebug) {
+        console.log(">>>>>>>>>>>>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<<<<<<<<<<<<<<<<<<<");
         console.log('[Telegram.WebView] postEvent', eventType, eventData);
       }
       callback({notAvailable: true});
@@ -157,6 +162,7 @@
   };
 
   function receiveEvent(eventType, eventData) {
+    console.log(">>~~<<");
     callEventCallbacks(eventType, function(callback) {
       callback(eventType, eventData);
     });
@@ -197,7 +203,7 @@
   };
 
   function openProtoUrl(url) {
-    console.log(">>>>URL >>>",url);
+    console.log("In openProtoURL >>>>");
     if (!url.match(/^(web\+)?tgb?:\/\/./)) {
       return false;
     }
@@ -276,7 +282,6 @@
 
 // WebApp
 (function () {
-  console.log("Window >>>>",window);
   var Utils = window.Telegram.Utils;
   var WebView = window.Telegram.WebView;
   var initParams = WebView.initParams;
