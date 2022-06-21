@@ -136,9 +136,9 @@
     }
     else if (isIframe) {
       try {
-        var trustedTarget = 'https://web.telegram.org';
+        //var trustedTarget = 'https://web.telegram.org';
         // For now we don't restrict target, for testing purposes
-        trustedTarget = '*';
+        var trustedTarget = '*';
         window.parent.postMessage(JSON.stringify({eventType: eventType, eventData: eventData}), trustedTarget);
         if (initParams.tgWebAppDebug) {
           console.log('[Telegram.WebView] postEvent via postMessage', eventType, eventData);
@@ -197,6 +197,7 @@
   };
 
   function openProtoUrl(url) {
+    console.log(">>>>URL >>>",url);
     if (!url.match(/^(web\+)?tgb?:\/\/./)) {
       return false;
     }
@@ -275,6 +276,7 @@
 
 // WebApp
 (function () {
+  console.log("Window >>>>",window);
   var Utils = window.Telegram.Utils;
   var WebView = window.Telegram.WebView;
   var initParams = WebView.initParams;
